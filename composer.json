@@ -16,6 +16,5 @@
     },
     "autoload": {
         "psr-0": { "Jaitsu\\ConstantResolver": "src" }
-    },
-    "target-dir": "Jaitsu/ConstantResolver"
+    }
 }
