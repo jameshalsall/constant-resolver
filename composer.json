@@ -1,0 +1,26 @@
+{
+    "name": "jaitsu87/constant-resolver",
+    "description": "Provides functionality for mapping class constant values back to their semantic names",
+    "keywords": ["constants"],
+    "homepage": "http://github.com/jaitsu87/constant-resolver",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "James Halsall",
+            "email": "james.t.halsall@googlemail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.10"
+    },
+    "autoload": {
+        "psr-0": { "Jaitsu\\ConstantResolver": "./src" }
+    },
+    "target-dir": "Jaitsu/ConstantResolver",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
