@@ -69,18 +69,22 @@ class ConstantResolver
     {
         $reflection = new \ReflectionClass($className);
         $constants = $reflection->getConstants();
-        $matches = array();
 
-        // we have to iterate over the values to find matches because an array_flip() would
-        // result in lost keys when there are non-unique constant values in the class
-        foreach ($constants as $name => $value) {
-            if ($value == $constantValue) {
-                $matches[] = sprintf('%s::%s', $className, $name);
+        // filter out any values that aren't identical to the searched value
+        $matches = array_filter(
+            $constants,
+            function ($item) use ($constantValue) {
+                return $item === $constantValue;
             }
-        }
+        );
 
         if (0 === count($matches)) {
             throw new RangeException(sprintf('No constant found with value %s', $constantValue));
+        }
+
+        // loop through the matches and add the fully qualified class name
+        foreach ($matches as $name => $value) {
+            $matches[$name] = sprintf('%s::%s', $className, $name);
         }
 
         return implode($separator, $matches);
