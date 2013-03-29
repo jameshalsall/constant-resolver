@@ -59,7 +59,7 @@ class ConstantResolver
      *
      * @param string $className     The name of the class to resolve constants up for
      * @param mixed  $constantValue The constant value to resolve
-     * @param string $separator     The string to use to separate contstant names when multiple values are found
+     * @param string $separator     The string to use to separate constant names when multiple values are found
      *
      * @return string
      *
