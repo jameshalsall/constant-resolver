@@ -2,6 +2,8 @@
 
 namespace Jaitsu\ConstantResolver;
 
+use RangeException;
+
 /**
  * ConstantResolver.
  *
@@ -60,6 +62,8 @@ class ConstantResolver
      * @param string $separator     The string to use to separate contstant names when multiple values are found
      *
      * @return string
+     *
+     * @throws RangeException
      */
     public static function doResolve($className, $constantValue, $separator = ' or ')
     {
@@ -73,6 +77,10 @@ class ConstantResolver
             if ($value == $constantValue) {
                 $matches[] = sprintf('%s::%s', $className, $name);
             }
+        }
+
+        if (0 === count($matches)) {
+            throw new RangeException(sprintf('No constant found with value %s', $constantValue));
         }
 
         return implode($separator, $matches);
