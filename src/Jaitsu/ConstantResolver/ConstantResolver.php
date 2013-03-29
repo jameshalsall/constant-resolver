@@ -61,7 +61,7 @@ class ConstantResolver
      *
      * @return string
      */
-    public static function doResolve($className, $constantValue, $separator = 'or')
+    public static function doResolve($className, $constantValue, $separator = ' or ')
     {
         $reflection = new \ReflectionClass($className);
         $constants = $reflection->getConstants();
@@ -74,8 +74,6 @@ class ConstantResolver
                 $matches[] = sprintf('%s::%s', $className, $name);
             }
         }
-
-        $separator = str_pad(trim($separator), strlen($separator) + 2, ' ', STR_PAD_BOTH);
 
         return implode($separator, $matches);
     }
