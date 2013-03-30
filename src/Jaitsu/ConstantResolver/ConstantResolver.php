@@ -2,6 +2,8 @@
 
 namespace Jaitsu\ConstantResolver;
 
+use RangeException;
+
 /**
  * ConstantResolver.
  *
@@ -57,25 +59,33 @@ class ConstantResolver
      *
      * @param string $className     The name of the class to resolve constants up for
      * @param mixed  $constantValue The constant value to resolve
-     * @param string $separator     The string to use to separate contstant names when multiple values are found
+     * @param string $separator     The string to use to separate constant names when multiple values are found
      *
      * @return string
+     *
+     * @throws RangeException
      */
-    public static function doResolve($className, $constantValue, $separator = 'or')
+    public static function doResolve($className, $constantValue, $separator = ' or ')
     {
         $reflection = new \ReflectionClass($className);
         $constants = $reflection->getConstants();
-        $matches = array();
 
-        // we have to iterate over the values to find matches because an array_flip() would
-        // result in lost keys when there are non-unique constant values in the class
-        foreach ($constants as $name => $value) {
-            if ($value == $constantValue) {
-                $matches[] = sprintf('%s::%s', $className, $name);
+        // filter out any values that aren't identical to the searched value
+        $matches = array_filter(
+            $constants,
+            function ($item) use ($constantValue) {
+                return $item === $constantValue;
             }
+        );
+
+        if (0 === count($matches)) {
+            throw new RangeException(sprintf('No constant found with value %s', $constantValue));
         }
 
-        $separator = str_pad(trim($separator), strlen($separator) + 2, ' ', STR_PAD_BOTH);
+        // loop through the matches and add the fully qualified class name
+        foreach ($matches as $name => $value) {
+            $matches[$name] = sprintf('%s::%s', $className, $name);
+        }
 
         return implode($separator, $matches);
     }
