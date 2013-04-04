@@ -76,7 +76,7 @@ class ConstantResolverTest extends PHPUnit_Framework_TestCase
      *
      * Makes sure that undefined values throw a range exception
      *
-     * @expectedException RangeException
+     * @expectedException \RangeException
      */
     public function testResolveWithInvalidConstantValueAndObjectInstance()
     {
@@ -84,5 +84,20 @@ class ConstantResolverTest extends PHPUnit_Framework_TestCase
         $resolver = new ConstantResolver($object);
 
         $resolver->resolve('undefined value');
+    }
+
+    /**
+     * Tests the doResolve() method
+     *
+     * Makes sure that the resolve works for internal PHP classes
+     *
+     * @return void
+     */
+    public function testResolveWithInternalPhpClass()
+    {
+        $constantValue = \ZipArchive::ER_DELETED;
+        $constantName = ConstantResolver::doResolve('ZipArchive', $constantValue);
+
+        $this->assertEquals('ZipArchive::ER_DELETED', $constantName);
     }
 }
