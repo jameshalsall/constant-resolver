@@ -70,4 +70,19 @@ class ConstantResolverTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedString, $resolver->resolve('string value'));
         $this->assertEquals($expectedInteger, $resolver->resolve(100));
     }
+
+    /**
+     * Tests the resolve() method
+     *
+     * Makes sure that undefined values throw a range exception
+     *
+     * @expectedException RangeException
+     */
+    public function testResolveWithInvalidConstantValueAndObjectInstance()
+    {
+        $object = new UniqueValueConstants();
+        $resolver = new ConstantResolver($object);
+
+        $resolver->resolve('undefined value');
+    }
 }
