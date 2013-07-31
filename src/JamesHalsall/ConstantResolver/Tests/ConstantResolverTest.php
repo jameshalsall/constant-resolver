@@ -100,4 +100,59 @@ class ConstantResolverTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('ZipArchive::ER_DELETED', $constantName);
     }
+
+    /**
+     * Tests the resolve() method
+     *
+     * Makes sure an array containing the single unique constant name is returned
+     *
+     * @return void
+     */
+    public function testResolveUniqueReturnArray()
+    {
+        $object = new UniqueValueConstants();
+        $resolver = new ConstantResolver($object);
+        $resolver->setReturnType(ConstantResolver::RETURN_ARRAY);
+
+        $this->assertEquals(
+            array(
+                'DUMMY_CONSTANT_STRING' => 'JamesHalsall\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_STRING'
+            ),
+            $resolver->resolve('string value')
+        );
+
+        $this->assertEquals(
+            array(
+                'DUMMY_CONSTANT_INTEGER' => 'JamesHalsall\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_INTEGER'
+            ),
+            $resolver->resolve(100)
+        );
+    }
+
+    /**
+     * Tests the resolve() method
+     *
+     * Makes sure an array containing the multiple constant names is returned
+     *
+     * @return void
+     */
+    public function testResolveNonUniqueReturnArray()
+    {
+        $object = new NonUniqueValueConstants();
+        $resolver = new ConstantResolver($object);
+        $resolver->setReturnType(ConstantResolver::RETURN_ARRAY);
+
+        $expectedString = array(
+            'DUMMY_CONSTANT_STRING' => 'JamesHalsall\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_STRING',
+            'DUMMY_CONSTANT_STRING_TWO' => 'JamesHalsall\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_STRING_TWO'
+        );
+
+        $expectedInteger = array(
+            'DUMMY_CONSTANT_INTEGER' => 'JamesHalsall\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_INTEGER',
+            'DUMMY_CONSTANT_INTEGER_TWO' => 'JamesHalsall\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_INTEGER_TWO'
+        );
+
+        $this->assertEquals($expectedString, $resolver->resolve('string value'));
+        $this->assertEquals($expectedInteger, $resolver->resolve(100));
+    }
 }
