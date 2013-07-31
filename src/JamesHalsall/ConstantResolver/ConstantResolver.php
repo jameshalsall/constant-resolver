@@ -63,7 +63,7 @@ class ConstantResolver
      *
      * @return string
      *
-     * @throws RangeException
+     * @throws RangeException If a constant can not be found
      */
     public static function doResolve($className, $constantValue, $separator = ' or ')
     {
