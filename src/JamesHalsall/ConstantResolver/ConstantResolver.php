@@ -3,6 +3,7 @@
 namespace JamesHalsall\ConstantResolver;
 
 use RangeException;
+use RuntimeException;
 
 /**
  * ConstantResolver.
@@ -16,6 +17,19 @@ use RangeException;
  */
 class ConstantResolver
 {
+    const RETURN_STRING = 1;
+    const RETURN_ARRAY  = 2;
+
+    const DEFAULT_SEPARATOR = ' or ';
+    const DEFAULT_RETURN_TYPE = self::RETURN_STRING;
+
+    /**
+     * Specifies the return type expected in resolver
+     *
+     * @var integer
+     */
+    protected $returnType = self::RETURN_STRING;
+
     /**
      * The class name to resolve constants for
      *
@@ -39,13 +53,27 @@ class ConstantResolver
      *
      * Internally calls the convenience function static::doResolve()
      *
-     * @param mixed $constantValue The value of the constant to resolve
+     * @param mixed   $constantValue The value of the constant to resolve
      *
-     * @return string
+     * @return string|array
      */
     public function resolve($constantValue)
     {
-        return static::doResolve($this->className, $constantValue);
+        return static::doResolve($this->className, $constantValue, $this->returnType);
+    }
+
+    /**
+     * Set the return type
+     *
+     * @param integer $returnType New return type
+     *
+     * @return $this
+     */
+    public function setReturnType($returnType)
+    {
+        $this->returnType = $returnType;
+
+        return $this;
     }
 
     /**
@@ -57,16 +85,29 @@ class ConstantResolver
      * If more than one result is found for that constant value, it returns them string joined by the given
      * separator. For example: "ClassName::NAME_ONE {separator} ClassName::NAME_TWO"
      *
-     * @param string $className     The name of the class to resolve constants up for
-     * @param mixed  $constantValue The constant value to resolve
-     * @param string $separator     The string to use to separate constant names when multiple values are found
+     * @param string  $className     The name of the class to resolve constants up for
+     * @param mixed   $constantValue The constant value to resolve
+     * @param integer $returnType    Data type for resolver return value
+     * @param string  $separator     The string to use to separate constant names when multiple values are found
      *
-     * @return string
-     *
+     * @throws RuntimeException If invalid return type is provided
      * @throws RangeException If a constant can not be found
+     *
+     * @return string|array
+     *
      */
-    public static function doResolve($className, $constantValue, $separator = ' or ')
+    public static function doResolve($className, $constantValue, $returnType = null, $separator = null)
     {
+        // if no return type provided, use the default
+        if (null === $returnType) {
+            $returnType = self::DEFAULT_RETURN_TYPE;
+        }
+
+        // if no separator provided, use the default
+        if (null === $separator && $returnType === self::RETURN_STRING) {
+            $separator = self::DEFAULT_SEPARATOR;
+        }
+
         $reflection = new \ReflectionClass($className);
         $constants = $reflection->getConstants();
 
@@ -87,7 +128,14 @@ class ConstantResolver
             $matches[$name] = sprintf('%s::%s', $className, $name);
         }
 
-        return implode($separator, $matches);
+        switch ($returnType) {
+            case self::RETURN_STRING:
+                return implode($separator, $matches);
+            case self::RETURN_ARRAY:
+                return $matches;
+            default:
+                throw new RuntimeException(sprintf('Invalid return type (%s) provided in resolver', $returnType));
+        }
     }
 
     /**
