@@ -11,6 +11,7 @@ Add "jameshalsall/constant-resolver" to your composer.json require section.
 ## Usage
 
 Example class:
+
 ```` php
 <?php
 
@@ -20,6 +21,8 @@ class SomeClass
 
     ...
 }
+
+````
 
 ```` php
 <?php
