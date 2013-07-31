@@ -32,6 +32,35 @@ use JamesHalsall\ConstantResolver;
 $someClass = new SomeClass();
 $resolver  = new ConstantResolver($someClass);
 
-// returns SomeClass::MY_CONSTANT_NAME
+// returns 'SomeClass::MY_CONSTANT_NAME'
 $constant = $resolver->resolve(1);
+````
+
+## Example
+
+```` php
+<?php
+
+$httpErrorCodes = new HttpErrorCodes();
+
+$resolver = new ConstantResolver($enumerableClass);
+
+// returns 'HttpErrorCodes::NOT_FOUND'
+$resolver->resolve(404);
+````
+
+Same example with array return:
+
+```` php
+<?php
+
+...
+
+$resolver->setReturnType(ConstantResolver::RETURN_ARRAY);
+
+/**
+ * returns array(
+ *     'NOT_FOUND' => 'HttpErrorCodes::NOT_FOUND'
+ * );
+ */
 ````
