@@ -1,6 +1,6 @@
 <?php
 
-namespace Jaitsu\ConstantResolver;
+namespace JamesHalsall\ConstantResolver;
 
 use RangeException;
 
@@ -10,7 +10,7 @@ use RangeException;
  * Provides functionality for mapping a class' constant values back to their
  * semantic names.
  *
- * @package Jaitsu\ConstantResolver
+ * @package JamesHalsall\ConstantResolver
  * @author  James Halsall <jhalsall@rippleffect.com>
  * @license MIT <http://opensource.org/licenses/MIT>
  */

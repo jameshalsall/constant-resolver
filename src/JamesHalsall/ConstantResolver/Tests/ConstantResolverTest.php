@@ -1,16 +1,16 @@
 <?php
 
-namespace Jaitsu\ConstantResolver\Tests\ConstantResolver;
+namespace JamesHalsall\ConstantResolver\Tests\ConstantResolver;
 
-use Jaitsu\ConstantResolver\ConstantResolver;
-use Jaitsu\ConstantResolver\Tests\Mock\NonUniqueValueConstants;
-use Jaitsu\ConstantResolver\Tests\Mock\UniqueValueConstants;
+use JamesHalsall\ConstantResolver\ConstantResolver;
+use JamesHalsall\ConstantResolver\Tests\Mock\NonUniqueValueConstants;
+use JamesHalsall\ConstantResolver\Tests\Mock\UniqueValueConstants;
 use PHPUnit_Framework_TestCase;
 
 /**
  * Tests for the constant resolver
  *
- * @package Jaitsu\ConstantResolver\Tests\ConstantResolver
+ * @package JamesHalsall\ConstantResolver\Tests\ConstantResolver
  * @author  James Halsall <jhalsall@rippleffect.com>
  */
 class ConstantResolverTest extends PHPUnit_Framework_TestCase
@@ -28,8 +28,8 @@ class ConstantResolverTest extends PHPUnit_Framework_TestCase
         $object = new UniqueValueConstants();
         $resolver = new ConstantResolver($object);
 
-        $this->assertEquals('Jaitsu\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_STRING', $resolver->resolve('string value'));
-        $this->assertEquals('Jaitsu\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_INTEGER', $resolver->resolve(100));
+        $this->assertEquals('JamesHalsall\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_STRING', $resolver->resolve('string value'));
+        $this->assertEquals('JamesHalsall\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_INTEGER', $resolver->resolve(100));
     }
 
     /**
@@ -45,8 +45,8 @@ class ConstantResolverTest extends PHPUnit_Framework_TestCase
         $object = new UniqueValueConstants();
         $resolver = new ConstantResolver(get_class($object));
 
-        $this->assertEquals('Jaitsu\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_STRING', $resolver->resolve('string value'));
-        $this->assertEquals('Jaitsu\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_INTEGER', $resolver->resolve(100));
+        $this->assertEquals('JamesHalsall\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_STRING', $resolver->resolve('string value'));
+        $this->assertEquals('JamesHalsall\ConstantResolver\Tests\Mock\UniqueValueConstants::DUMMY_CONSTANT_INTEGER', $resolver->resolve(100));
     }
 
     /**
@@ -61,11 +61,11 @@ class ConstantResolverTest extends PHPUnit_Framework_TestCase
         $object = new NonUniqueValueConstants();
         $resolver = new ConstantResolver($object);
 
-        $expectedString = 'Jaitsu\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_STRING or ' .
-                          'Jaitsu\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_STRING_TWO';
+        $expectedString = 'JamesHalsall\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_STRING or ' .
+                          'JamesHalsall\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_STRING_TWO';
 
-        $expectedInteger = 'Jaitsu\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_INTEGER or ' .
-                           'Jaitsu\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_INTEGER_TWO';
+        $expectedInteger = 'JamesHalsall\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_INTEGER or ' .
+                           'JamesHalsall\ConstantResolver\Tests\Mock\NonUniqueValueConstants::DUMMY_CONSTANT_INTEGER_TWO';
 
         $this->assertEquals($expectedString, $resolver->resolve('string value'));
         $this->assertEquals($expectedInteger, $resolver->resolve(100));
